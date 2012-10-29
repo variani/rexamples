@@ -1,0 +1,66 @@
+body {
+  font-family: "Hoefler Text", "Georgia", 'Times', "Bitstream Vera Serif", serif;
+  width: 700px;
+  margin: 0 auto;
+  color: #222222;
+  background: #fefefe;
+}
+
+h1 { text-shadow: rgba(128, 128, 128, 0.6) 0px 1px 3px; }
+
+h1 a:hover, h1 a:link, h1 a:visited, h1 a:hover, h1 a:active, h1 a:focus { color: #222222; text-decoration: none; }
+h2 a:hover, h2 a:link, h2 a:visited, h2 a:hover, h2 a:active, h2 a:focus { color: #222222; text-decoration: none; }
+h3 a:hover, h3 a:link, h3 a:visited, h3 a:hover, h3 a:active, h3 a:focus { color: #222222; text-decoration: none; }
+
+code,
+pre {
+  padding: 0 3px 2px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-size: 12px;
+  color: #333333;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+}
+
+code {
+  padding: 2px 4px;
+  color: #d14;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+}
+
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 20px;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre;
+  white-space: pre-wrap;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+
+pre.prettyprint {
+  margin-bottom: 20px;
+}
+
+pre code {
+  padding: 0;
+  color: inherit;
+  background-color: transparent;
+  border: 0;
+}
+
+.pre-scrollable {
+  max-height: 340px;
+  overflow-y: scroll;
+}
+
