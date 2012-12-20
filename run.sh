@@ -1,6 +1,7 @@
 #!/bin/bash
 
-dirs=("ggplot2")
+#dirs=("ggplot2" "cart")
+dirs=("cart")
 
 dir_out="output"
 name="output"
@@ -12,7 +13,7 @@ date_curr=$(date +"%m/%d/%y")
 
 
 header_str_1="% Output from R code
-% github.com/variani/drift-multicomp
+% github.com/variani/rexamples
 % $date_curr"
 
 header_str_2='

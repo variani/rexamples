@@ -34,7 +34,7 @@ p2
 p3 <- plotPCA(sa, conc = conc1, sdata = sdata1, air = FALSE)
 p3 
 
-p4 <- plotPCA(sa, conc = conc1, sdata = sdata1, air = FALSE)
+p4 <- plotPCA(sa, conc = conc2, sdata = sdata2, air = FALSE)
 p4
 
 ### divistion into training/test sets
