@@ -22,6 +22,10 @@ library(ggplot2)
 ### load/stat data
 load("chemosensors/data/reg-univar-A.RData") # -> sa, set1, set2, df1, df2
 
+sa
+
+plot(sa)
+
 p1 <- plotSignal(sa, set = set1)
 p1
 
