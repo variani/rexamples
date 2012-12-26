@@ -4,7 +4,7 @@
 library(chemosensors)
 
 ### sa/sc
-sa <- SensorArray(num = 1:5, dsd = 0)
+sa <- SensorArray(num = 1:8, dsd = 0)
 
 set1 <- c("A 0.01", "A 0.02", "A 0.05") # the working range (more linear)
 set2 <- c("A 0.001", "A 0.005", "A 0.01", "A 0.02", "A 0.05", "A 0.1") # a complete range of concentrations
