@@ -14,7 +14,10 @@
 ### include
 library(chemosensors)
 
-library(caret)
+#library(caret)
+
+library(devtools)
+load_all("tmp/pkg/caret/")
 
 library(plyr)
 library(ggplot2)
@@ -24,7 +27,7 @@ load("chemosensors/data/reg-univar-A.RData") # -> sa, set1, set2, df1, df2
 
 sa
 
-plot(sa)
+#plot(sa)
 
 p1 <- plotSignal(sa, set = set1)
 p1
@@ -68,7 +71,12 @@ formula2 <- formula(paste(paste(colnames(Y.train2), collapse = "+"), "~", paste(
 data2 <- cbind(X.train2, Y.train2)
 
 trControl <- trainControl(method = "repeatedcv", number = 10) ## 10-fold CV
-tuneGrid <- expand.grid(.decay = 1e-4, .size = c(1, 3, 5, 10)) # we've already found `decay 1e-4` to be the best
+#tuneGrid <- expand.grid(.decay = 1e-4, .size = c(1, 3, 5, 10)) # we've already found `decay 1e-4` to be the best
+tuneGrid <- expand.grid(.layer1 = 1:5, .layer2 = 0, .layer3 = 0) # we've already found `decay 1e-4` to be the best
+
+fit <- train(formula1, data1, method = "neuralnet", trace = TRUE)
+
+stop()
 
 fit1 <- train(formula1, data1, 
   method = "nnet", maxit = 1000,
