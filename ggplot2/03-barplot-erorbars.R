@@ -18,14 +18,18 @@ hwy.stat <- ddply(mpg, c("class", "year"), summarise,
 
 # create the plot
 p2 <- qplot(class, hwy.avg, fill = factor(year), data = hwy.stat, geom = "bar", position = "dodge")
+p2
 
 # plot #1
 p3 <- p2 + geom_errorbar(aes(ymax = hwy.avg + hwy.sd, ymin = hwy.avg - hwy.sd), position = "dodge")
+p3
 
 # plot #2
 dodge <- position_dodge(width = 0.9) 
 p4 <- p2 + geom_errorbar(aes(ymax = hwy.avg + hwy.sd, ymin = hwy.avg - hwy.sd), position = dodge, width = 0.15)
+p4
 
 # plot #3
 dodge <- position_dodge(width = 0.9) 
 p5 <- p2 + geom_linerange(aes(ymax = hwy.avg + hwy.sd, ymin = hwy.avg - hwy.sd), position = dodge)
+p5

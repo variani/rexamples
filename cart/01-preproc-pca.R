@@ -2,6 +2,8 @@
 
 ### include
 library(caret)
+library(plyr)
+library(ggplot2)
 
 ### data
 data(iris)
@@ -32,4 +34,46 @@ transform
 T.tr <- predict(transform, X.tr)
 T.val <- predict(transform, X.val)
 
+### fit a model
+trControl <- trainControl(method = "repeatedcv", number = 10) ## 10-fold CV
+tuneGrid <- expand.grid(.size = c(1, 2, 3), .decay = c(0, 1e-4, 0.01))
+
+fit <- train(T.tr, Y.tr, 
+  trControl = trControl, 
+  method = "nnet", tuneGrid = tuneGrid, #tuneLength = 4,
+  trace = FALSE)
+
+fit
+
+plot(fit)
+
+model <- fit$finalModel
+
+### prediction
+pf <- extractPrediction(list(fit), testX = T.val, testY = Y.val) # Prediction data Frame
+head(pf)
+
+pf <- mutate(pf,
+  predicted.ok = factor(obs == pred, levels = c("TRUE", "FALSE")))
+  
+# statistics for validation set
+pf.val <- subset(pf, dataType == "Test")
+stat <- confusionMatrix(pf.val$pred, pf.val$obs)
+stat
+
+### final plots
+pf.tr <- subset(pf, dataType == "Training")
+df <- cbind(pf.tr, T.tr) # Data Frame for plotting
+
+p1 <- ggplot(df, aes(PC1, PC2)) + 
+  geom_point(colour = "grey50", aes(size = predicted.ok)) +
+  geom_point(aes(colour = obs)) + ggtitle("Training Set")
+p1
+
+df <- cbind(pf.val, T.val) # Data Frame for plotting
+
+p2 <- ggplot(df, aes(PC1, PC2)) + 
+  geom_point(colour = "grey50", aes(size = predicted.ok)) +
+  geom_point(aes(colour = obs)) + ggtitle("Validation Set")
+p2
 
