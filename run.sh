@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#dirs=("ggplot2" "cart")
+#dirs=("ggplot2" "cart" "chemosensors" "plyr")
 dirs=("chemosensors")
 
 dir_out="output"

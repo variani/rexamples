@@ -16,30 +16,43 @@ library(chemosensors)
 
 #library(caret)
 
-library(devtools)
-load_all("tmp/pkg/caret/")
+#library(devtools)
+#load_all("tmp/pkg/caret/")
+library(parc)
 
 library(plyr)
 library(ggplot2)
 
 ### load/stat data
-load("chemosensors/data/reg-univar-A.RData") # -> sa, set1, set2, df1, df2
+load("chemosensors/data/RegUniA.RData") # -> sa, set1, set2, df1, df2
 
-sa
+names(RegUniA)
 
-#plot(sa)
+set1 <- RegUniA$set1  
+set2 <- RegUniA$set2
 
-p1 <- plotSignal(sa, set = set1)
+sa <- RegUniA$sa    
+
+df1 <- RegUniA$df1
+df2 <- RegUniA$df2   
+
+p1 <- qplot(as.factor(A), S1, data = df1, geom = "boxplot")
 p1
 
-p2 <- plotSignal(sa, set = set2)
+p2 <- qplot(as.factor(A), S1, data = df2, geom = "boxplot")
 p2
 
-p3 <- plotPCA(sa, set = rep(set1, 3), air = FALSE)
-p3 
+p3 <- plotSignal(sa, set = set1)
+p3
 
-p4 <- plotPCA(sa, set = rep(set2, 3), air = FALSE)
+p4 <- plotSignal(sa, set = set2)
 p4
+
+p5 <- plotPCA(sa, set = rep(set1, 3), air = FALSE)
+p5 
+
+p6 <- plotPCA(sa, set = rep(set2, 3), air = FALSE)
+p6
 
 ### divistion into training/test sets
 ind.train1 <- 1:nrow(df1) <= (2/3) * nrow(df1) # first 2/3 of samples for T
@@ -64,28 +77,9 @@ X.train2 <- X2[ind.train2, , drop = FALSE]
 X.test2 <- X2[-ind.train2, , drop = FALSE]
 
 ### fit
-formula1 <- formula(paste(paste(colnames(Y.train1), collapse = "+"), "~", paste(colnames(X.train1), collapse = "+")))
-data1 <- cbind(X.train1, Y.train1)
+fit1 <- ParcTrain(X.train1, Y.train1, method = "neuralnet", tuneLength = 7, cores = 2)
+fit2 <- ParcTrain(X.train2, Y.train2, method = "neuralnet", tuneLength = 7, cores = 2)
 
-formula2 <- formula(paste(paste(colnames(Y.train2), collapse = "+"), "~", paste(colnames(X.train2), collapse = "+")))
-data2 <- cbind(X.train2, Y.train2)
+plot(fit1)
 
-trControl <- trainControl(method = "repeatedcv", number = 10) ## 10-fold CV
-#tuneGrid <- expand.grid(.decay = 1e-4, .size = c(1, 3, 5, 10)) # we've already found `decay 1e-4` to be the best
-tuneGrid <- expand.grid(.layer1 = 1:5, .layer2 = 0, .layer3 = 0) # we've already found `decay 1e-4` to be the best
-
-fit <- train(formula1, data1, method = "neuralnet", trace = TRUE)
-
-stop()
-
-fit1 <- train(formula1, data1, 
-  method = "nnet", maxit = 1000,
-  trControl = trControl, tuneGrid = tuneGrid, trace = FALSE)
-  
-plot(fit1)  
-
-fit2 <- train(formula2, data2, 
-  method = "nnet", maxit = 1000,
-  trControl = trControl, tuneGrid = tuneGrid, trace = FALSE)
-  
-plot(fit2)  
+plot(fit2)
