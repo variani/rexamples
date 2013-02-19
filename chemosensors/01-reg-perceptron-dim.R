@@ -23,6 +23,9 @@ library(parc)
 library(plyr)
 library(ggplot2)
 
+### parameters
+nsensors <- 3
+
 ### load/stat data
 load("chemosensors/data/RegUniA.RData") # -> sa, set1, set2, df1, df2
 
@@ -58,10 +61,10 @@ p6
 ind.train1 <- 1:nrow(df1) <= (2/3) * nrow(df1) # first 2/3 of samples for T
 ind.train2 <- 1:nrow(df2) <= (2/3) * nrow(df2) # first 2/3 of samples for T
 
-X1 <- df1[, grep("^S", names(df1)), drop = FALSE]
+X1 <- df1[, grep("^S", names(df1))[1:nsensors], drop = FALSE]
 Y1 <- df1[, grep("A", names(df1)), drop = FALSE]
 
-X2 <- df2[, grep("^S", names(df2)), drop = FALSE]
+X2 <- df2[, grep("^S", names(df2))[1:nsensors], drop = FALSE]
 Y2 <- df2[, grep("A", names(df2)), drop = FALSE]
 
 Y.train1 <- Y1[ind.train1, , drop = FALSE]
@@ -77,8 +80,8 @@ X.train2 <- X2[ind.train2, , drop = FALSE]
 X.test2 <- X2[-ind.train2, , drop = FALSE]
 
 ### fit
-fit1 <- ParcTrain(X.train1, Y.train1, method = "neuralnet", tuneLength = 7, cores = 2)
-fit2 <- ParcTrain(X.train2, Y.train2, method = "neuralnet", tuneLength = 7, cores = 2)
+fit1 <- ParcTrain(X.train1, Y.train1, method = "neuralnet", tuneLength = 7, cores = 2, resampling = "boot", nparts = 50)
+fit2 <- ParcTrain(X.train2, Y.train2, method = "neuralnet", tuneLength = 7, cores = 2, resampling = "boot", nparts = 50)
 
 plot(fit1)
 
