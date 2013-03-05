@@ -1,11 +1,4 @@
 ### 01-reg-perceptron-dim.R
-#
-# About.
-# We'd like to see how non-linear are the sensors/data generation models in the package 'chemosensors'.
-# A synthetic experiment is proposed:
-# - employ data from the only gas, e.g. 'A';
-# - use a perceptron as a regressor, since the number of neurons is a measure of dimensionality (of the perceptron's output).
-# 
 
 ### include
 library(chemosensors)
@@ -15,38 +8,118 @@ library(caret)
 library(plyr)
 library(ggplot2)
 
+library(doMC)
+
 ### parameters
-tuneLength <- 15
+seed.value <- 1
 
-### load/stat data
-load("chemosensors/data/regA.RData")
+gases <- c("A", "B", "C")
 
-names(regA)
-df <- regA
+tuneLength1 <- 24
+tuneLength2 <- 10
+ 
+cores <- 2
 
-### divistion into training/test sets
-ind.train <- seq(1, nrow(df)/2)
-ind.test <- seq(nrow(df)/2, nrow(df))
+### parallel
+if(cores > 1) {
+  registerDoMC(cores = cores)
+}
 
-X <- df[, grep("^S", names(df))]
-Y <- df[, grep("A", names(df)), drop = FALSE]
+### data
+load("chemosensors/data/reg.RData")
 
-X.train <- X[ind.train, , drop = FALSE]
-X.test <- X[-ind.test, , drop = FALSE]
+### variables
+nsensors <- 1:nsensors(sa)
 
-Y.train <- Y[ind.train, , drop = TRUE]
-Y.test <- Y[ind.test, , drop = TRUE]
+### test on small-size problem
+if(TRUE)
+{
+  tuneLength1 <- 2
+  tuneLength2 <- 2
+  
+  nsensors <- 2
+}
 
-### fit
-#set.seed(1)
-#fit1 <- caret::train(X.train, Y.train, method = "pls", 
-#  tuneLength = tuneLength, preProc = c("center", "scale"), 
-#  trControl = trainControl(method = "repeatedcv", repeats = 10))
+### input
+input <- llply(gases, function(gas) 
+{ 
+  dataset.name <- paste("reg", gas, sep = "")
+  cmd <- paste("df <- ", dataset.name)
+  eval(parse(text = cmd))
 
-set.seed(1)
-fit2 <- caret::train(X.train, Y.train, method = "pls", 
-  tuneLength = tuneLength, preProc = c("center", "scale", "spatialSign"), 
-  trControl = trainControl(method = "repeatedcv", repeats = 10))
+  ### divistion into training/test sets
+  snames <- grep("^S", names(df))[1:nsensors]
+  
+  X.train <- subset(df, set == "T", select = snames)
+  X.test <- subset(df, set == "V", select = snames)
 
-plot(fit1)
-plot(fit2)
+  Y.train <- subset(df, set == "T", select = gas, drop = TRUE)
+  Y.test <- subset(df, set == "V", select = gas, drop = TRUE)
+
+  list(gas = gas, dataset.name = dataset.name, df = df,
+    X.train = X.train, X.test = X.test, Y.train = Y.train, Y.test = Y.test,
+    tuneLength1 = tuneLength1, tuneLength2 = tuneLength2)
+})
+names(input) <- gases
+
+  
+### output
+compute_fits <- function(input, seed.value = 1)
+{
+  llply(input, function(x) {
+
+  require(caret)
+  
+  set.seed(seed.value)
+  fit1 <- caret::train(x$X.train, x$Y.train, method = "pls", 
+    tuneLength = x$tuneLength1, preProc = c("center", "scale"), 
+    trControl = trainControl(method = "repeatedcv", repeats = 10))
+
+  set.seed(seed.value)
+  fit2 <- caret::train(x$X.train, x$Y.train, method = "svmRadial", 
+    tuneLength = x$tuneLength1, preProc = c("center", "scale"), 
+    trControl = trainControl(method = "repeatedcv", repeats = 10))
+
+    c(x, list(fit1 = fit1, fit2 = fit2))
+  })
+}
+
+eval_fits <- function(input)
+{
+  llply(input, function(x) {
+    tab <- ldply(list(x$fit1, x$fit2), function(fit) {
+      bestTune <- fit$bestTune
+
+      data.frame(param = paste(laply(1:ncol(bestTune), function(i) 
+          paste(names(bestTune)[i], round(bestTune[1, i], 4))), collapse = ", "),
+        RMSE.train = RMSE(predict(fit, x$X.train), x$Y.train),
+        RMSE.test = RMSE(predict(fit, x$X.test), x$Y.test))
+    })
+    
+    tab <- cbind(tab[1, ], tab[2, ])
+    tab <- data.frame(gas = x$gas, tab)
+
+    c(x, list(tab = tab))
+  })  
+}
+
+clean_output <- function(output)
+{
+  llply(output, function(x) {
+    list(gas = x$gas, fit1 = x$fit1, fit2 = x$fit2, tab = x$tab)
+  })
+}
+
+output <- compute_fits(input, seed.value = seed.value)
+output <- eval_fits(output)
+output <- clean_output(output)
+
+tab <- ldply(output, function(x) x$tab)
+tab <- tab[, -1] # remove column '.id'    
+
+### print
+print(ascii(tab, format = c("s", rep(c("s", "f", "f"), 2)), digits = 4, include.rownames = FALSE))
+
+### save
+save(sa, output, tab, file = "reg-output.RData")
+
