@@ -90,13 +90,14 @@ eval_fits <- function(input)
     tab <- ldply(list(x$fit1, x$fit2), function(fit) {
       bestTune <- fit$bestTune
 
-      data.frame(param = paste(laply(1:ncol(bestTune), function(i) 
+      data.frame(gas = x$gas,
+        method = fit$method,
+        param = paste(laply(1:ncol(bestTune), function(i) 
           paste(names(bestTune)[i], round(bestTune[1, i], 4))), collapse = ", "),
         RMSE.train = RMSE(predict(fit, x$X.train), x$Y.train),
         RMSE.test = RMSE(predict(fit, x$X.test), x$Y.test))
     })
     
-    tab <- cbind(tab[1, ], tab[2, ])
     tab <- data.frame(gas = x$gas, tab)
 
     c(x, list(tab = tab))
@@ -118,8 +119,9 @@ tab <- ldply(output, function(x) x$tab)
 tab <- tab[, -1] # remove column '.id'    
 
 ### print
-print(ascii(tab, format = c("s", rep(c("s", "f", "f"), 2)), digits = 4, include.rownames = FALSE))
+#print(ascii(tab, format = c("s", rep(c("s", "f", "f"), 2)), digits = 4, include.rownames = FALSE))
 
 ### save
 save(sa, output, tab, file = "reg-output.RData")
+save(tab, file = "reg-tab.RData")
 
