@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #dirs=("ggplot2" "cart" "chemosensors" "plyr")
-dirs=("chemosensors")
+dirs=("nnet")
 
 dir_out="output"
 name="output"
