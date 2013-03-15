@@ -18,6 +18,8 @@ numC <- c(13:14, 17)
 numAC <- c(1:3, 13:14, 17)
 nsensors <- 24
 
+dsd.values <- c(0, 0.1)
+
 narrays <- 3
 
 ### parallel
@@ -54,19 +56,23 @@ gas_to_num <- function(gas, i)
 
 input <- llply(gases, function(x) {
   llply(1:narrays, function(i) {
-    num <- gas_to_num(x, i)
+    llply(dsd.values, function(dsd) {
+      num <- gas_to_num(x, i)
 
-    set.seed(seed.value)
-    sa <- SensorArray(num = num, nsensors = nsensors)
-    
-    list(gas = x, num = num, nsensors = nsensors, sa = sa)
+      set.seed(seed.value)
+      sa <- SensorArray(num = num, nsensors = nsensors, dsd = dsd)
+      
+      list(gas = x, num = num, nsensors = nsensors, dsd = dsd, sa = sa)
+    })
   })
 }, .parallel = TRUE) 
 
 stopifnot(length(input) == 2)
+stopifnot(length(input[[1]]) == 3)
 input <- c(input[[1]], input[[2]])
 
-names(input) <- paste(rep(gases, each = narrays), "array", 1:narrays, sep = ".")
+stopifnot(length(input) == 6)
+input <- c(input[[1]], input[[2]], input[[3]], input[[4]], input[[5]], input[[6]])
 
 ### input (conc)
 gas_to_conc <- function(gas)

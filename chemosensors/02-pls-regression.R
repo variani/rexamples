@@ -87,11 +87,9 @@ eval_fits <- function(input)
       bestTune <- fit$bestTune
 
       data.frame(gas = x$gas,
-<<<<<<< HEAD
         nsensors = x$nsensors,
         num = paste(x$num, collapse = ", "),
-=======
->>>>>>> ff9f3133759aebec5a3c446f4a3bbd922655b408
+        dsd = x$sa@dsd, 
         method = fit$method,
         param = paste(laply(1:ncol(bestTune), function(i) 
           paste(names(bestTune)[i], round(bestTune[1, i], 4))), collapse = ", "),
@@ -99,11 +97,6 @@ eval_fits <- function(input)
         RMSE.test = RMSE(predict(fit, x$X.test), x$Y.test))
     })
     
-<<<<<<< HEAD
-=======
-    tab <- data.frame(gas = x$gas, tab)
-
->>>>>>> ff9f3133759aebec5a3c446f4a3bbd922655b408
     c(x, list(tab = tab))
   })  
 }
@@ -111,7 +104,7 @@ eval_fits <- function(input)
 clean_output <- function(output)
 {
   llply(output, function(x) {
-    list(gas = x$gas, fit1 = x$fit1, fit2 = x$fit2, tab = x$tab)
+    list(gas = x$gas, sa = x$sa, fit1 = x$fit1, fit2 = x$fit2, tab = x$tab)
   })
 }
 
@@ -126,10 +119,5 @@ tab <- tab[, -1] # remove column '.id'
 #print(ascii(tab, format = c("s", rep(c("s", "f", "f"), 2)), digits = 4, include.rownames = FALSE))
 
 ### save
-<<<<<<< HEAD
 save(output, tab, file = "reg-output.RData")
-=======
-save(sa, output, tab, file = "reg-output.RData")
 save(tab, file = "reg-tab.RData")
->>>>>>> ff9f3133759aebec5a3c446f4a3bbd922655b408
-
