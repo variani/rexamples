@@ -15,8 +15,6 @@ nsensors <- 24
 
 seed.value <- 1
 
-gases <- c("A", "B", "C")
-
 tuneLength1 <- 24
 tuneLength2 <- 10
  
@@ -28,12 +26,13 @@ if(cores > 1) {
 }
 
 ### data
-load("chemosensors/data/reg.RData")
+#load("chemosensors/data/reg.RData")
+load("chemosensors/reg.RData")
 
 ### variables
 
 ### test on small-size problem
-if(TRUE)
+if(FALSE)
 {
   reg <- reg[1:2]
   tuneLength1 <- 2
@@ -68,12 +67,12 @@ compute_fits <- function(input, seed.value = 1)
   set.seed(seed.value)
   fit1 <- caret::train(x$X.train, x$Y.train, method = "pls", 
     tuneLength = x$tuneLength1, preProc = c("center", "scale"), 
-    trControl = trainControl(method = "repeatedcv", repeats = 10))
+    trControl = trainControl(method = "repeatedcv", number = 10, repeats = 10))
 
   set.seed(seed.value)
   fit2 <- caret::train(x$X.train, x$Y.train, method = "svmRadial", 
     tuneLength = x$tuneLength2, preProc = c("center", "scale"), 
-    trControl = trainControl(method = "repeatedcv", repeats = 10))
+    trControl = trainControl(method = "repeatedcv", number = 10, repeats = 10))
 
     c(x, list(fit1 = fit1, fit2 = fit2))
   })

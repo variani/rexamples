@@ -11,7 +11,7 @@ cores <- 2
 seed.value <- 1
 
 gases <- c("A", "C")
-nSet <- 20
+nSet <- 100
 
 numA <- 1:3
 numC <- c(13:14, 17) 
