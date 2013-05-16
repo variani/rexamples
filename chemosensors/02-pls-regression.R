@@ -63,16 +63,17 @@ compute_fits <- function(input, seed.value = 1)
   llply(input, function(x) {
 
   require(caret)
-  
+
+  trControl <- trainControl(method = "repeatedcv", number = 10, repeats = 10, selectionFunction = "tolerance") 
+    
   set.seed(seed.value)
   fit1 <- caret::train(x$X.train, x$Y.train, method = "pls", 
-    tuneLength = x$tuneLength1, preProc = c("center", "scale"), 
-    trControl = trainControl(method = "repeatedcv", number = 10, repeats = 10))
+    tuneLength = x$tuneLength1, preProc = c("center", "scale"), trControl = trControl)
 
   set.seed(seed.value)
   fit2 <- caret::train(x$X.train, x$Y.train, method = "svmRadial", 
-    tuneLength = x$tuneLength2, preProc = c("center", "scale"), 
-    trControl = trainControl(method = "repeatedcv", number = 10, repeats = 10))
+    tuneLength = x$tuneLength2, 
+    preProc = c("center", "scale"), trControl = trControl)
 
     c(x, list(fit1 = fit1, fit2 = fit2))
   })
