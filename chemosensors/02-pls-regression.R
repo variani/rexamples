@@ -20,7 +20,7 @@ seed.value <- 1
 tuneLength1 <- 24
 tuneLength2 <- 5
  
-cores <- 2
+cores <- 8
 
 ### parallel
 if(cores > 1) {
@@ -67,9 +67,8 @@ compute_fits <- function(input, seed.value = 1)
 
   require(caret)
 
-  trControl <- trainControl(method = "repeatedcv", number = 10, repeats = 10, selectionFunction = "tolerance") 
-    
   set.seed(seed.value)
+  trControl <- trainControl(method = "repeatedcv", number = 10, repeats = 10, selectionFunction = "tolerance") 
   fit1 <- caret::train(x$X.train, x$Y.train, method = "pls", 
     tuneLength = x$tuneLength1, preProc = c("center", "scale"), trControl = trControl)
 
