@@ -11,12 +11,14 @@ library(ggplot2)
 library(doMC)
 
 ### parameters
+testing <- TRUE
+
 nsensors <- 24
 
 seed.value <- 1
 
 tuneLength1 <- 24
-tuneLength2 <- 10
+tuneLength2 <- 5
  
 cores <- 2
 
@@ -32,13 +34,14 @@ load("chemosensors/reg.RData")
 ### variables
 
 ### test on small-size problem
-if(FALSE)
+if(testing)
 {
-  reg <- reg[1:2]
-  tuneLength1 <- 2
-  tuneLength2 <- 2
+  #reg <- reg[1:2]
+  #tuneLength1 <- 2
+  #tuneLength2 <- 2
   
-  nsensors <- 2
+  #nsensors <- 2
+  reg <- reg[2]
 }
 
 ### input
@@ -71,6 +74,7 @@ compute_fits <- function(input, seed.value = 1)
     tuneLength = x$tuneLength1, preProc = c("center", "scale"), trControl = trControl)
 
   set.seed(seed.value)
+  trControl <- trainControl(method = "repeatedcv", number = 10, repeats = 10, selectionFunction = "tolerance") 
   fit2 <- caret::train(x$X.train, x$Y.train, method = "svmRadial", 
     tuneLength = x$tuneLength2, 
     preProc = c("center", "scale"), trControl = trControl)
