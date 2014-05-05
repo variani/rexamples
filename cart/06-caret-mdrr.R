@@ -5,6 +5,7 @@
 #
 ### References
 # * http://www.edii.uclm.es/~useR-2013/Tutorials/kuhn/user_caret_2up.pdf
+# * http://stackoverflow.com/questions/15592696/aucroc-and-roc-functions-in-the-caret-r-package
 
 ### include
 library(caret)
