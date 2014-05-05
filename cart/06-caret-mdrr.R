@@ -2,6 +2,9 @@
 # Aim: reproduce some code examples in 'The caret Package', Max Kuhn, February 8, 2011
 # @ http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.192.6170&rep=rep1&type=pdf
 #  * data set: mdrr
+#
+### References
+# * http://www.edii.uclm.es/~useR-2013/Tutorials/kuhn/user_caret_2up.pdf
 
 ### include
 library(caret)
