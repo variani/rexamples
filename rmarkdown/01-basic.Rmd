@@ -1,0 +1,34 @@
+---
+title: "My title."
+author: "Joe Smith"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: united
+    toc: true
+    keep_md: true
+bibliography: ref.bib    
+---
+
+```{r options, echo = F}
+opts_chunk$set(fig.path = "figures/", comment = NA, results = 'asis', tidy = F, message = F, warning = F, echo = F)
+```
+
+```{r par}
+alpha <- 0.05
+```
+
+```{r inc, cache = FALSE}
+library(plyr)
+library(ggplot2)
+library(gridExtra)
+
+library(pander)
+
+library(data.table)
+```
+
+```{r settings, cache = FALSE}
+theme_set(theme_light())
+panderOptions('table.split.table', Inf)
+```
