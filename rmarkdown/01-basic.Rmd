@@ -32,3 +32,10 @@ library(data.table)
 theme_set(theme_light())
 panderOptions('table.split.table', Inf)
 ```
+
+## Tables
+
+```{r tab, echo = FALSE, message = FALSE, warnings = FALSE, results = 'asis'}
+pander(head(iris), style = 'rmarkdown', digits = 2, big.mark = ",")
+```
+
