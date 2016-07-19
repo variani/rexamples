@@ -30,6 +30,9 @@ library(data.table)
 
 ```{r settings, cache = FALSE}
 theme_set(theme_light())
+
+panderOptions('table.style', 'rmarkdown')
+
 panderOptions('table.split.table', Inf)
 panderOptions('knitr.auto.asis', FALSE)
 ```
