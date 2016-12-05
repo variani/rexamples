@@ -1,3 +1,6 @@
+# https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html
+# https://github.com/baptiste/gridextra/wiki/arranging-ggplot
+
 library(ggplot2)
 library(gridExtra)
 
