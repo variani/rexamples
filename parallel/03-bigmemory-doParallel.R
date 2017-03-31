@@ -2,6 +2,7 @@
 # - http://www.chrisbilder.com/compstat/presentations/Xiaojuan/Presentation_bigmemory.pdf
 # - http://www.bytemining.com/wp-content/uploads/2010/08/r_hpc_II.pdf
 # - https://rstudio-pubs-static.s3.amazonaws.com/72295_692737b667614d369bd87cb0f51c9a4b.html
+# - http://pbgworks.org/sites/pbgworks.org/files/Slides.pdf
 #
 ### output
 # 1: shared TRUE
