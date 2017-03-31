@@ -1,3 +1,7 @@
 # bigmemory
 mat\.bin
 mat\.desc
+
+# ff
+ffmat.RData
+ffmat.ffData
