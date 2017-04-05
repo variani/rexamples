@@ -35,9 +35,20 @@ panderOptions('table.style', 'rmarkdown')
 
 panderOptions('table.split.table', Inf)
 panderOptions('knitr.auto.asis', FALSE)
+
+panderOptions('table.alignment.default', 'left')
 ```
 
-## Tables
+# Figures
+
+## Side-by-side figures
+
+```{r fig_side_by_side, , fig.show = "hold", out.width = "50%"}
+plot(1:10)
+plot(rnorm(10))
+```
+
+# Tables
 
 ```{r tab, echo = FALSE, message = FALSE, warnings = FALSE, results = 'asis'}
 pander(head(iris), style = 'rmarkdown', digits = 2, big.mark = ",")
