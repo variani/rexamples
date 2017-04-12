@@ -1,4 +1,4 @@
-### ref
+     (fm1 <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy))### ref
 # @ http://stackoverflow.com/questions/8358098/how-to-set-seed-for-random-simulations-with-foreach-and-domc-packages
 
 ### inc
