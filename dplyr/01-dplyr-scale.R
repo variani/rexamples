@@ -15,24 +15,28 @@ dat1 <- mutate_all(dat, funs(fun_center))
 dat2 <- mutate_all(dat, funs(fun_scale))
 
 ### (2) scale row-wise
-row_means <- rowwise(dat) %>% 
-  do(stat = mean(as.numeric(.))) %>% 
-  summarize(mean = stat) %$% mean
+#row_means <- rowwise(dat) %>% 
+#  do(stat = mean(as.numeric(.))) %>% 
+#  summarize(mean = stat) %$% mean
+
+row_means <- apply(dat, 1, mean)
 
 fun_center <- function(x, means = row_means) x - means
 
 dat1 <- mutate_all(dat, funs(fun_center))
 
 # note that `dat1` is used instead of `dat`
-row_sds <- rowwise(dat1) %>% 
-  do(stat = sd(as.numeric(.)))
+#row_sds <- rowwise(dat1) %>% 
+#  do(stat = sd(as.numeric(.)))
 
 # option 1  
-row_sds <- row_sds %>% 
-  summarize(sd = stat) %$% sd
+#row_sds <- row_sds %>% 
+#  summarize(sd = stat) %$% sd
 
 # option 2  
 #row_sds <- row_sds %>% unlist %>% as.numeric
+
+row_sds <- apply(dat, 1, sd)
 
 fun_scale <- function(x, sds = row_sds) x/sds
 
