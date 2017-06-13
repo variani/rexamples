@@ -7,6 +7,8 @@ output:
     theme: united
     toc: true
     keep_md: true
+    includes:
+      in_header: header.html
 bibliography: ref.bib    
 ---
 
@@ -22,6 +24,8 @@ alpha <- 0.05
 library(plyr)
 library(ggplot2)
 library(gridExtra)
+
+library(magrittr)
 
 library(pander)
 
@@ -52,5 +56,24 @@ plot(rnorm(10))
 
 ```{r tab, echo = FALSE, message = FALSE, warnings = FALSE, results = 'asis'}
 pander(head(iris), style = 'rmarkdown', digits = 2, big.mark = ",")
+```
+
+# Custom header
+
+Specify the custom header:
+
+```
+output:
+  html_document:
+    includes:
+      in_header: header.html
+```
+
+## Disable Google robots
+
+Add the following line to disable that your web page is indexed by Google, etc.
+
+```
+<meta name="robots" content="noindex">
 ```
 
