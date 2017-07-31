@@ -13,7 +13,7 @@ bibliography: ref.bib
 ---
 
 ```{r options, echo = F}
-opts_chunk$set(fig.path = "figures/", comment = NA, results = 'markup', tidy = F, message = F, warning = F, echo = F)
+opts_chunk$set(dev = "png", dev.args = list(type = "cairo"), dpi = 192, fig.path = "figures/", comment = NA, results = 'markup', tidy = F, message = F, warning = F, echo = F)
 ```
 
 ```{r par}
