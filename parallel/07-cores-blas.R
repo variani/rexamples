@@ -8,8 +8,8 @@ mat <- matrix(runif(n*p), n, p)
 
 # by default: using all cores, as `elapsed` < `user`
 system.time(crossprod(mat))
->   user  system elapsed
->  0.605   0.001   0.176
+#>   user  system elapsed
+#>  0.605   0.001   0.176
 
 # check #cores
 get_num_cores()
